@@ -1,6 +1,6 @@
 import Printer from "../lib/printer";
 import generate, { CodeGenerator } from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
@@ -304,6 +304,7 @@ describe("programmatic generation", function() {
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
       null,
       null,
+      null,
     );
 
     const output = generate(objectStatement).code;
@@ -315,6 +316,7 @@ describe("programmatic generation", function() {
   it("flow object exact", function() {
     const objectStatement = t.objectTypeAnnotation(
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
+      null,
       null,
       null,
       true,
@@ -336,6 +338,7 @@ describe("programmatic generation", function() {
           t.numberTypeAnnotation(),
         ),
       ],
+      null,
     );
 
     const output = generate(objectStatement).code;

@@ -262,6 +262,18 @@ function andSeparator() {
   this.space();
 }
 
+export function InterfaceTypeAnnotation(node: Object) {
+  this.word("interface");
+  if (node.extends && node.extends.length) {
+    this.space();
+    this.word("extends");
+    this.space();
+    this.printList(node.extends, node);
+  }
+  this.space();
+  this.print(node.body, node);
+}
+
 export function IntersectionTypeAnnotation(node: Object) {
   this.printJoin(node.types, node, { separator: andSeparator });
 }
@@ -384,6 +396,7 @@ export function ObjectTypeAnnotation(node: Object) {
   const props = node.properties.concat(
     node.callProperties || [],
     node.indexers || [],
+    node.internalSlots || [],
   );
 
   if (props.length) {
@@ -411,6 +424,24 @@ export function ObjectTypeAnnotation(node: Object) {
   } else {
     this.token("}");
   }
+}
+
+export function ObjectTypeInternalSlot(node: Object) {
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  this.token("[");
+  this.token("[");
+  this.print(node.id, node);
+  this.token("]");
+  this.token("]");
+  if (node.optional) this.token("?");
+  if (!node.method) {
+    this.token(":");
+    this.space();
+  }
+  this.print(node.value, node);
 }
 
 export function ObjectTypeCallProperty(node: Object) {
